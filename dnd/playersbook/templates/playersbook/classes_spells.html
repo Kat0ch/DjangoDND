@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block navbar %}
+{% include 'inc/_navbar.html'%}
+{% endblock %}
+
+{% block title %}
+Заклинания {{ class.name }}: {{block.super}}
+{% endblock title %}
+
+{% block sidebartitle %}
+Навигация
+{% endblock sidebartitle %}
+
+{% block sidebar %}
+<ul class="list-group list-group-flush">
+    {% for spell in class.spells.all %}
+    {% ifchanged spell.level %}
+    <li class="list-group-item"><a href="#spell_level-{{spell.level}}">
+        {% if spell.level == 0 %}
+        Заговоры
+        {% else %}
+        Уровень заклинаний: {{ spell.level }}
+
+        {% endif %}</a>
+    </li>
+    {% endifchanged %}
+
+    <li class="list-group-item "><a href="#spell-{{spell.pk}} "><div class="ps-3">{{ spell.name }}</div></a></li>
+    {% endfor %}
+</ul>
+{% endblock sidebar %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link " href="{% url 'class' class.pk %}">Класс</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" aria-current="true" href="{% url 'subclasses_by_class' class.pk %}">Подклассы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="true" href="">Заклинания</a>
+            </li>
+        </ul>
+    </div>
+    <ul class="list-group">
+        {% for spell in class.spells.all %}
+        {% ifchanged spell.level %}
+        <li class="list-group-item">
+            <h5 class="ps-2 mt-3 fw-bold" id="spell_level-{{spell.level}}">
+                {% if spell.level == 0 %}
+                Заговоры
+                {% else %}
+                Уровень заклинаний: {{ spell.level }}
+
+                {% endif %}
+            </h5>
+        </li>
+        {% endifchanged %}
+        <li class="list-group-item">
+            <ul class="list-group list-group-flush">
+
+                <li class="list-group-item ps-3 fw-bolder fst-italic" id="spell-{{spell.pk}}" >{{ spell.name }}</li>
+                <li class="list-group-item ps-3">
+                    <div class="fw-bold">Время накладывания:</div>
+                    <div class="d-inline nowrap">{{ spell.use_time }}</div>
+                </li>
+                <li class="list-group-item ps-3">
+                    <div class="fw-bold">Дистанция:</div>
+                    <div class="d-inline nowrap">{{ spell.distant }}</div>
+                </li>
+                <li class="list-group-item ps-3">
+                    <div class="fw-bold">Компоненты:</div>
+                    <div class="d-inline nowrap">{{ spell.components }}</div>
+                </li>
+                <li class="list-group-item ps-4">{{ spell.description|linebreaks }}</li>
+                {% if spell.higher_level_description %}
+                <li class="list-group-item ps-3">
+                    <div class="d-inline nowrap">{{ spell.higher_level_description }}</div>
+                </li>
+                {% endif %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+
+
+</div>
+{% endblock content %}

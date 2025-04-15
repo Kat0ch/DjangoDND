@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block navbar %}
+{% include 'inc/_navbar.html'%}
+{% endblock %}
+{% load PHB_tags %}
+
+{% block title %}
+Оружие: {{block.super}}
+{% endblock title %}
+
+{% block sidebartitle %}
+Фильтры поиска
+{% endblock %}
+
+{% block sidebar %}
+<form method="get">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Применить</button>
+</form>
+{% endblock sidebar %}
+
+
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Категория</th>
+        <th>Класс</th>
+        <th>Урон</th>
+        <th>Свойства</th>
+        <th>Прием</th>
+        <th>Вес</th>
+        <th>Цена</th>
+        <th>Источник</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for weapon in weapons %}
+    <tr>
+        <td>{{ weapon.name }}</td>
+        <td>{{ weapon.category }}</td>
+        <td>{{ weapon.weapon_class }}</td>
+        <td>{{ weapon.damage_correct_display }}</td>
+        <td>
+            {% for feature in weapon.features.all %}
+            {{ feature.name }}
+            {% endfor %}
+        </td>
+        <td>{{ weapon.technique }}</td>
+        <td>{{ weapon.weight }}</td>
+        <td>{{ weapon.price_correct_display }}</td>
+        <td>{{ weapon.source }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock content %}

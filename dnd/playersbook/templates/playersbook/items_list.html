@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block navbar %}
+{% include 'inc/_navbar.html'%}
+{% endblock %}
+{% load PHB_tags %}
+
+{% block title %}
+Предметы: {{block.super}}
+{% endblock title %}
+
+{% block sidebartitle %}
+Фильтры поиска
+{% endblock %}
+
+
+{% block sidebar %}
+<form method="get">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Применить</button>
+</form>
+{% endblock sidebar %}
+
+
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Вес</th>
+        <th>Цена</th>
+        <th>Источник</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.weight }}</td>
+        <td>{{ item.price_correct_display }}</td>
+        <td>{{ item.source }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% load PHB_tags %}
+
+
+{% if list_type == 'spells' %}
+<li><a class="dropdown-item" href="#">Все</a></li>
+{% for element in elements %}
+<li><a class="dropdown-item" href="{% # %}">{{ element.name }}</a></li>
+{% endfor %}
+
+{% elif list_type == 'classes' %}
+<li><a class="dropdown-item" href="{% url 'classes' %}">Все</a></li>
+{% for element in elements %}
+<li><a class="dropdown-item" href="{% url 'class' element.pk %}">{{ element.name }}</a>
+</li>
+{% endfor %}
+{% endif %}

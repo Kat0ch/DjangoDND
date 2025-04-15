@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block navbar %}
+{% include 'inc/_navbar.html'%}
+{% endblock %}
+
+{% block title %}
+Классы: {{block.super}}
+{% endblock title %}
+
+{% block sidebartitle %}
+
+Фильтры поиска
+{% endblock %}
+
+{% block sidebar %}
+<form method="get">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Применить</button>
+</form>
+
+{% endblock sidebar %}
+<div class="card-body">
+    {{ class.name }}
+</div>
+{% block content %}
+<div class="card-container" style="display: flex;">
+    {% for class in classes %}
+    <div class="card me-2" style="width: 18rem;">
+        {% if class.image %}
+        <div style="height: 25rem;">
+            <a href="{% url 'class' class.pk %}">
+                <img src="{{ class.image.url }}" class="card-img-top" alt="...">
+            </a>
+        </div>
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ class.name }}</h5>
+            <p class="card-text">
+                {% for main_char in class.main_chars.all %}
+                {{ main_char.name }}
+                {% endfor %}
+            </p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Кость хитов: d{{ class.hit_dice.value }}</li>
+            <li class="list-group-item">Основные характеристики:
+                <br>
+                {% for main_char in class.main_chars.all %}
+                {{ main_char.name }}
+                {% endfor %}
+            </li>
+            <li class="list-group-item">Спасброски:
+                <br>
+                {% for saving_throw in class.saving_throws.all %}
+                {{ saving_throw.name }}
+                {% endfor %}
+            </li>
+
+        </ul>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock content %}

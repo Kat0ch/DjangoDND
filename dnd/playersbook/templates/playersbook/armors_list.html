@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block navbar %}
+{% include 'inc/_navbar.html'%}
+{% endblock %}
+{% load PHB_tags %}
+{% block title %}
+Доспехи: {{block.super}}
+{% endblock title %}
+
+{% block sidebartitle %}
+Фильтры поиска
+{% endblock %}
+
+{% block sidebar %}
+<form method="get">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Применить</button>
+</form>
+{% endblock sidebar %}
+
+
+{% block content %}
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Категория</th>
+        <th>Класс защиты</th>
+        <th>Минимум силы</th>
+        <th>Помеха скрытности</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for armor in armors %}
+    {% ifchanged armor.category %}
+    <tr>
+        <th>{{ armor.category }}</th>
+    </tr>
+    {% endifchanged %}
+    <tr>
+        <th>{{ armor.name }}</th>
+        <th>{{ armor.category }}</th>
+        <th>{{ armor.AC }} {{ armor.AC_add }}</th>
+        <th>
+            {% if armor.strength is Null %}
+            -
+            {% else %}
+            {{ armor.strength }}
+            {% endif %}
+        </th>
+        <th>
+            {% if armor.stealth %}
+            Есть
+            {% else %}
+            Нет
+            {% endif %}
+        </th>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock content %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block navbar %}
+{% include 'inc/_navbar.html'%}
+{% endblock %}
+
+{% block title %}
+Подклассы {{class.name}}: {{block.super}}
+{% endblock title %}
+
+{% block sidebartitle %}
+Навигация
+{% endblock sidebartitle %}
+
+{% block sidebar %}
+<ul class="list-group list-group-flush">
+    {% for subclass in subclasses.all %}
+    {% for level in subclass.levels.all %}
+    <li class="list-group-item"><a href="#sub_level-{{level.pk}}">{{level.level_number}}. {{ level.name }}</a></li>
+    {% endfor %}
+    {% endfor %}
+</ul>
+{% endblock sidebar %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link " href="{% url 'class' class_id %}">Класс</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="true" href="">Подклассы</a>
+            </li>
+            {% for spell in class.spells.all %}
+            {% if forloop.counter0 == 0 %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'class_spells' class_id %}">Заклинания</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="row g-0">
+            {% for subclass in subclasses.all %}
+            <div class="col-md-3">
+                {% if subclass.image %}
+                <img src="{{ subclass.image.url }}" class="img-fluid rounded-start" alt="...">
+                {% endif %}
+            </div>
+            <div class="col-md-9">
+                <div class="card-body">
+                    <div class="card">
+                        <h5 class="card-header">{{ subclass.sub_class_name }}</h5>
+                        <div class="card-body">
+                            <h5 class="card-title">Описание</h5>
+                            <p class="card-text">{{ subclass.sub_class_description|linebreaks }}</p>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        {% for level in subclass.levels.all %}
+                        <div class="mt-3">
+                            <div class="card">
+                                <div id="sub_level-{{level.pk}}"></div>
+                                <div class="card-header">
+                                    Уровень {{ level.level_number }}: {{ level.name }}
+                                </div>
+                                <div class="card-body">
+                                    <blockquote class="blockquote mb-0">
+                                        <div class="fs-6">
+                                            <p>{{ level.level_description|linebreaks }}</p>
+                                        </div>
+                                    </blockquote>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                {% for level in class.levels.all %}
+                <div class="mt-3">
+                    <div class="card">
+                        <div class="card-header">
+                            Уровень {{level.level_number}}. {{level.name}}
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <div class="fs-6">
+                                    <p>{{level.level_description|linebreaks}}</p>
+                                </div>
+                            </blockquote>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock content %}
