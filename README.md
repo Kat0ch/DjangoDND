@@ -11,11 +11,12 @@
 
 ## Запуск
 
-### Запуск приложения с готовой базой данных
+### Запуск приложения
 
 1. Выполните следующую команду из приложения
 
 ```python
+python manage.py migrate
 python manage.py runserver
 ```
 
@@ -23,7 +24,5 @@ python manage.py runserver
 
 1. Выполните следующте команды из приложения
     ```python
-    python manage.py makemigrations
-    python manage.py migrate
 	python manage.py runserver
     ```
