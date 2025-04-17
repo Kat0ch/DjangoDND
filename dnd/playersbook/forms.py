@@ -11,7 +11,10 @@ class UserLoginForm(AuthenticationForm):
     password = forms.CharField(label='Пароль',
                                widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
-
+# FIXME типизацию посмотри подробнее, ты её указываешь, но не корректно
+#  тут бы было что-то типа: dict[str, dict[str, bool | forms.Widget]]
+#  словари аннотариуются через запятые, а не через ':'
+#  ну и если уж указывать, то до конца)
 filter_base_arguments: dict[str: dict[str:]] = {
     'Char': {'required': False,
              'widget': forms.TextInput(attrs={'class': 'form-control'})},
@@ -50,6 +53,9 @@ class WeaponsFilterForm(forms.Form):
         label='Название',
         **filter_base_arguments['Char'])
 
+    # FIXME визуально не очень нравится, что тут qs определяются в таком виде
+    #  кажется, было бы правильнее делать это в инициализаторе (__init__)
+    #  во всяком случае те примеры, где есть какие-то правила фильтрации (damage_type, например)
     category: forms.MultipleChoiceField = forms.ModelMultipleChoiceField(
         queryset=WeaponsCategories.objects.all(),
         label='Категории', **filter_base_arguments['SM'])

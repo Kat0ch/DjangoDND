@@ -15,11 +15,11 @@ import os.path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print(F'BASE_DIR{BASE_DIR}')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# соль джанги лучше сразу в переменные окружения вынести, здесь даже написано об этом на строку выше)
 SECRET_KEY = 'django-insecure-*2+)fy%=_i$bz^0%4p%5zq!9%*zz=(y7waqn7w@65s_+)b)v21'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -36,8 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'playersbook.apps.PlayersBookConfig',
-
+    # 'playersbook.apps.PlayersBookConfig',
+    # аппы подключаются по названию
+    'playersbook'
 ]
 
 MIDDLEWARE = [
@@ -119,10 +120,8 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-print(F'MEDIA_ROOT{MEDIA_ROOT}')
 
 MEDIA_URL = '/media/'
-print(F'MEDIA_URL: {MEDIA_URL}')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
