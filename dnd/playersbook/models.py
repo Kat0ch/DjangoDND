@@ -66,6 +66,13 @@ class Dices(models.Model):
         verbose_name_plural = 'Кости'
 
 
+# FIXME не очень понял, это прям отдельная модель?
+#  т.е. у тебя есть просто предмет, а есть конкретные предметы, которые ничем не отключаются,
+#  но лежат в разных таблицах? (Weapons, DruidicFocuses и тд?)
+#  если так, то все таблицы, которые не имеют собственных уникальные аттрибутов
+#  можно сложить в одну таблицу, но добавить просто ItemType.
+#  Мб это и ок, но те таблицы, у которых нет собственных уникальных аттрибутов,
+#  точно следовало бы сделать иначе (пример я описал выше)
 class Items(models.Model):
     name = models.CharField(max_length=35, verbose_name='Название')
     description = models.TextField(blank=True, verbose_name='Описание')
@@ -175,6 +182,9 @@ class Sources(models.Model):
     description = models.TextField(blank=True, verbose_name='Описание')
     icon = models.ImageField(blank=True, verbose_name='Иконка', upload_to='photos/sources/%m/%Y/%d/')
 
+    # FIXME это что?)
+    #  как минимум, неправильная аннотация, т.к. у тебя сейчас метод возвращает str | None
+    #  а скорее всего, он должен возвращать строго строку.
     def get_absolute_url(self,
                          model: str) -> str:
         if model == 'classes':
@@ -225,6 +235,8 @@ class ArmorCategories(models.Model):
 
 class Armors(Items, models.Model):
     category = models.ForeignKey('ArmorCategories', on_delete=models.PROTECT, verbose_name='Категория')
+    # FIXME аттрибуты моделей называются всегда в lower кейсе
+    #  капсом можно объявлять всякие константы
     AC = models.IntegerField(verbose_name='КД')
     AC_add = models.CharField(max_length=100, verbose_name='Дополнение к КД', null=False, blank=True)
     strength = models.IntegerField(verbose_name='Минимум силы', null=False, blank=True)
@@ -235,6 +247,7 @@ class Armors(Items, models.Model):
         verbose_name_plural = 'Доспехи'
 
 
+# FIXME вот про эти модели я писал выше, они выглядят избыточными
 class ArcaneFocuses(Items, models.Model):
     class Meta:
         verbose_name = 'Магическая фокусировка'
@@ -251,6 +264,7 @@ class DruidicFocuses(Items, models.Model):
     class Meta:
         verbose_name = 'Фокусировка друидов'
         verbose_name_plural = 'Фокусировки друидов'
+# FIXME
 
 
 class Levels(models.Model):
@@ -301,6 +315,10 @@ class Spells(models.Model):
 
 
 class Damage(models.Model):
+    # FIXME не уверен, что тут PROTECT
+    #  думаю, тут достаточно было бы CASCADE, т.к. если ты удаляешь главный объект (мало ли)
+    #  то хотел бы, чтобы была не ошибка, а всё удалилось вместе.
+    #  Во всяком случае, я PROTECT встречал редко и тут не похоже на кейс, где он нужен
     damage_dice = models.ForeignKey('Dices', on_delete=models.PROTECT, verbose_name='Кость урона')
     dice_quantity = models.IntegerField(verbose_name='Количество костей')
     damage_type = models.ForeignKey('DamageTypes', on_delete=models.PROTECT, verbose_name='Тип урона')

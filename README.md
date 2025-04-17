@@ -15,7 +15,7 @@
 
 1. Выполните следующую команду из приложения
 
-```python
+```sh
 python manage.py migrate
 python manage.py runserver
 ```
@@ -23,6 +23,6 @@ python manage.py runserver
 ### Запуск приложения с готовой базой данных
 
 1. Выполните следующте команды из приложения
-    ```python
+    ```sh
 	python manage.py runserver
     ```
